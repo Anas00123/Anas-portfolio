@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Mohd Anas — Java Full Stack Developer</title>
-<meta name="description" content="Mohd Anas — Java Full Stack Developer specializing in Spring Boot, REST APIs, and enterprise backend architecture. Currently interning at Barrownz Pearl Web." />
+<meta name="description" content="Mohd Anas — Java Full Stack Developer specializing in Spring Boot, REST APIs, and enterprise backend architecture. Java Full Stack Developer at Barrownz Pearl Web." />
 <meta property="og:title" content="Mohd Anas — Java Full Stack Developer" />
 <meta property="og:description" content="Building scalable backend systems with Spring Boot, Hibernate, MySQL and REST APIs." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -59,6 +59,15 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 2px;
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
@@ -66,6 +75,13 @@ body {
 
 /* CANVAS BG */
 #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.4; }
+
+/* SCROLL PROGRESS BAR */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  z-index: 1200; transition: width 0.1s ease-out;
+}
 
 /* NAV */
 nav {
@@ -93,8 +109,17 @@ nav {
   font-size: 0.85rem; font-weight: 500;
   letter-spacing: 0.02em;
   transition: color 0.2s;
+  position: relative;
+  padding-bottom: 4px;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  transition: right 0.25s ease;
 }
 .nav-links a:hover { color: var(--blue-bright); }
+.nav-links a:hover::after, .nav-links a.active::after { right: 0; }
+.nav-links a.active { color: var(--blue-bright); }
 .nav-right { display: flex; align-items: center; gap: 1rem; }
 #theme-btn {
   background: none; border: 1px solid var(--border-bright);
@@ -108,6 +133,7 @@ nav {
   display: none; position: fixed; top: 64px; left: 0; right: 0;
   background: var(--bg-2); border-bottom: 1px solid var(--border);
   z-index: 999; flex-direction: column; gap: 0;
+  max-height: calc(100vh - 64px); overflow-y: auto;
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a {
@@ -169,6 +195,7 @@ section { position: relative; z-index: 1; }
   color: #fff; border-color: var(--blue);
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.35); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-outline {
   background: transparent; color: var(--text-2);
   border-color: var(--border-bright);
@@ -440,6 +467,7 @@ section { position: relative; z-index: 1; }
   padding: 0.25rem 0.75rem; border-radius: 100px;
   background: rgba(52,211,153,0.1); color: var(--green);
   border: 1px solid rgba(52,211,153,0.3);
+  white-space: nowrap;
 }
 .exp-badge.past { background: rgba(148,163,184,0.1); color: var(--text-3); border-color: var(--border); }
 .exp-company { color: var(--blue-bright); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
@@ -483,7 +511,16 @@ section { position: relative; z-index: 1; }
 .feature-list { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.5rem; }
 .feature-list li { color: var(--text-2); font-size: 0.85rem; display: flex; gap: 0.6rem; }
 .feature-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
-.project-btns { display: flex; gap: 0.75rem; }
+.project-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.live-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.68rem; font-family: var(--mono); font-weight: 700;
+  color: var(--green); background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.3);
+  padding: 0.2rem 0.6rem; border-radius: 100px; margin-left: 0.5rem;
+  vertical-align: middle;
+}
+.live-badge .ld { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 .dpi-dashboard {
   margin-top: 1.5rem;
   background: rgba(5,8,16,0.8);
@@ -636,7 +673,7 @@ section { position: relative; z-index: 1; }
   display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
 }
 .contact-item .ci-label { font-size: 0.72rem; color: var(--text-3); margin-bottom: 2px; }
-.contact-item .ci-value { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.contact-item .ci-value { font-size: 0.88rem; font-weight: 600; color: var(--text); word-break: break-word; }
 .contact-form { display: flex; flex-direction: column; gap: 1rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
 .form-group label { font-size: 0.8rem; color: var(--text-2); font-weight: 500; }
@@ -645,14 +682,39 @@ section { position: relative; z-index: 1; }
   border-radius: 10px; padding: 0.75rem 1rem;
   color: var(--text); font-family: var(--sans); font-size: 0.88rem;
   transition: border-color 0.2s; outline: none; resize: vertical;
+  width: 100%;
 }
 .form-group input:focus, .form-group textarea:focus { border-color: var(--blue-bright); }
+.form-error { font-size: 0.75rem; color: var(--red); min-height: 1em; }
+.form-note { font-size: 0.75rem; color: var(--text-3); line-height: 1.6; margin-top: -0.25rem; }
 .form-success {
   display: none; text-align: center; padding: 1.5rem;
   background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3);
   border-radius: 12px; color: var(--green); font-weight: 600;
 }
 .form-success.show { display: block; }
+.form-fail {
+  display: none; text-align: center; padding: 1rem;
+  background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 12px; color: var(--red); font-weight: 600; font-size: 0.85rem;
+}
+.form-fail.show { display: block; }
+
+/* =================== BACK TO TOP =================== */
+#back-to-top {
+  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 900;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-dim), var(--blue));
+  border: 1px solid var(--blue-bright);
+  color: #fff; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 8px 24px rgba(59,130,246,0.3);
+}
+#back-to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#back-to-top:hover { box-shadow: 0 10px 30px rgba(59,130,246,0.45); }
 
 /* =================== FOOTER =================== */
 footer {
@@ -676,25 +738,58 @@ footer .footer-brand {
 .fade-in-delay-3 { transition-delay: 0.3s; }
 
 /* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-inner { gap: 2.5rem; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .project-row { grid-template-columns: 1fr; }
+  .edu-grid { grid-template-columns: 1fr; }
+}
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .hamburger { display: block; }
   .hero-inner { grid-template-columns: 1fr; padding: 3rem 0; }
-  .hero-terminal { display: none; }
+  .hero-terminal { order: 2; }
   .about-grid { grid-template-columns: 1fr; }
   .project-row { grid-template-columns: 1fr; }
-  .contact-wrapper { grid-template-columns: 1fr; }
+  .contact-wrapper { grid-template-columns: 1fr; gap: 2rem; }
   .edu-grid { grid-template-columns: 1fr; }
   .arch-flow { flex-direction: column; }
   .arch-arrow { transform: rotate(90deg); }
   .exp-timeline::before { left: 20px; }
-  .exp-dot { width: 40px; height: 40px; }
+  .exp-dot { width: 40px; height: 40px; font-size: 1rem; }
   .exp-item { gap: 1rem; }
+  .about-highlight { flex-direction: column; align-items: center; text-align: center; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  #back-to-top { bottom: 1.25rem; right: 1.25rem; width: 40px; height: 40px; }
+}
+@media (max-width: 600px) {
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .hero-btns .btn { justify-content: center; }
+  .dpi-stats { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .dpi-stat .v { font-size: 0.85rem; }
+  .exp-header { flex-direction: column; align-items: flex-start; }
+  .skills-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 }
 @media (max-width: 480px) {
   .container { padding: 0 1.25rem; }
   nav { padding: 0 1.25rem; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: clamp(2rem, 9vw, 3rem); }
+  .section-title { font-size: clamp(1.5rem, 7vw, 2rem); }
+  .project-card, .exp-card, .about-highlight { padding: 1.25rem; }
+  .arch-node { min-width: 0; width: 100%; }
+  .tools-wall { gap: 0.5rem; }
+  .tool-badge { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-logo { font-size: 0.95rem; }
+}
+@media (max-width: 360px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .hero-socials { gap: 0.6rem; }
+  .social-link { width: 36px; height: 36px; }
 }
 </style>
 </head>
@@ -702,6 +797,7 @@ footer .footer-brand {
 
 <!-- Animated Canvas Background -->
 <canvas id="bg-canvas"></canvas>
+<div id="scroll-progress"></div>
 
 <!-- NAVIGATION -->
 <nav id="navbar">
@@ -716,7 +812,7 @@ footer .footer-brand {
   </ul>
   <div class="nav-right">
     <button id="theme-btn" onclick="toggleTheme()">☀ Light</button>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false">☰</button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
@@ -738,23 +834,23 @@ footer .footer-brand {
           Available for opportunities
         </div>
         <h1 class="hero-name">Mohd Anas</h1>
-        <p class="hero-role">Java Full Stack Developer <span>@</span> Barrownz Pearl</p>
+        <p class="hero-role">Java Full Stack Developer
         <div id="typed-text"></div>
         <p class="hero-desc">
-          Aspiring Java Full Stack Developer passionate about building scalable backend systems, REST APIs, and enterprise web applications with Spring Boot and modern Java technologies.
+          Java Full Stack Developer passionate about building scalable backend systems, REST APIs, and enterprise web applications with Spring Boot and modern Java technologies.
         </p>
         <div class="hero-btns">
-          <a href="Mohd_Anas_Resume.pdf" download="Mohd_Anas_Resume.pdf" class="btn btn-primary">⬇ Download Resume</a>
+          <a href="Mohd-Anas.pdf" download="Mohd-Anas.pdf" class="btn btn-primary" target="_blank">⬇ Download Resume</a>
           <a href="#contact" class="btn btn-outline">✉ Get in Touch</a>
         </div>
         <div class="hero-socials">
-          <a class="social-link" href="https://github.com/Anas00123" target="_blank" title="GitHub">
+          <a class="social-link" href="https://github.com/Anas00123" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </a>
-          <a class="social-link" href="https://linkedin.com/in/mohd-anas-99503125a" target="_blank" title="LinkedIn">
+          <a class="social-link" href="https://linkedin.com/in/mohd-anas-99503125a" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
           </a>
-          <a class="social-link" href="mailto:Mohdanas2253@gmail.com" title="Email">✉</a>
+          <a class="social-link" href="mailto:Mohdanas2253@gmail.com" title="Email" aria-label="Email">✉</a>
         </div>
       </div>
 
@@ -805,12 +901,12 @@ footer .footer-brand {
     <div class="stats-grid">
       <div class="glass-card stat-card fade-in fade-in-delay-1">
         <div class="stat-icon">☕</div>
-        <span class="stat-num" data-target="3">0</span>
+        <span class="stat-num" data-target="1">0</span>
         <div class="stat-label">Years Java Experience</div>
       </div>
       <div class="glass-card stat-card fade-in fade-in-delay-2">
         <div class="stat-icon">🚀</div>
-        <span class="stat-num" data-target="3">0</span>
+        <span class="stat-num" data-target="4">0</span>
         <div class="stat-label">Full Stack Projects</div>
       </div>
       <div class="glass-card stat-card fade-in fade-in-delay-3">
@@ -826,7 +922,7 @@ footer .footer-brand {
       <div class="glass-card stat-card fade-in fade-in-delay-1">
         <div class="stat-icon">🏢</div>
         <span class="stat-num" data-target="1">0</span>
-        <div class="stat-label">Active Internship</div>
+        <div class="stat-label">Full-Time Role</div>
       </div>
       <div class="glass-card stat-card fade-in fade-in-delay-2">
         <div class="stat-icon">🗄️</div>
@@ -856,20 +952,20 @@ footer .footer-brand {
       <div class="glass-card about-card">
         <div class="about-card-icon">🔒</div>
         <h3>Security-Minded</h3>
-        <p>Built a real-time Deep Packet Inspection system with threat detection, protocol analysis, and JA3 fingerprinting — proving security awareness at the application layer.</p>
+        <p>Built and deployed a real-time Deep Packet Inspection system with threat detection, protocol analysis, and JA3 fingerprinting — proving security awareness at the application layer.</p>
       </div>
       <div class="glass-card about-card">
         <div class="about-card-icon">📈</div>
         <h3>Industry Ready</h3>
-        <p>Currently working in a real company environment — writing production code, collaborating with teams, participating in code reviews, and shipping features daily.</p>
+        <p>Now working full-time in a real company environment — writing production code, collaborating with teams, participating in code reviews, and shipping features daily.</p>
       </div>
     </div>
     <div class="about-highlight fade-in">
       <div class="about-avatar">MA</div>
       <div class="about-bio">
         <h3>Mohd Anas</h3>
-        <div class="role">java_full_stack_intern @ Barrownz Pearl Web Pvt. Ltd.</div>
-        <p>Aspiring Java Full Stack Developer with strong expertise in Core Java, OOPs, Exception Handling, REST APIs, and SQL. Currently working as a Java Full Stack Intern at Barrownz Pearl Web Private Limited, Lucknow — building real-world web applications in a production environment. Passionate about backend architecture, scalable systems, and modern web applications.</p>
+        <div class="role">java_full_stack_developer @ Barrownz Pearl Web Pvt. Ltd.</div>
+        <p>Java Full Stack Developer with strong expertise in Core Java, OOPs, Exception Handling, REST APIs, and SQL. Working full-time at Barrownz Pearl Web Private Limited, Lucknow — building real-world web applications in a production environment. Passionate about backend architecture, scalable systems, and modern web applications.</p>
       </div>
     </div>
   </div>
@@ -902,13 +998,13 @@ footer .footer-brand {
         <div class="exp-dot">💼</div>
         <div class="glass-card exp-card">
           <div class="exp-header">
-            <span class="exp-role">Java Full Stack Intern</span>
+            <span class="exp-role">Java Full Stack Developer</span>
             <span class="exp-badge">● Active</span>
           </div>
           <div class="exp-company">Barrownz Pearl Web Private Limited — Lucknow</div>
-          <div class="exp-period">March 2026 — Present</div>
+          <div class="exp-period">July 2026 — Present</div>
           <ul class="exp-list">
-            <li>Real-world web application development in a professional team environment</li>
+            <li>Full-time backend & full stack development in a professional team environment</li>
             <li>Spring Boot backend development with RESTful architecture</li>
             <li>REST API design, implementation, and documentation with Swagger</li>
             <li>MySQL database integration, schema design, and optimization</li>
@@ -921,11 +1017,30 @@ footer .footer-brand {
         <div class="exp-dot">🎓</div>
         <div class="glass-card exp-card">
           <div class="exp-header">
+            <span class="exp-role">Java Full Stack Intern</span>
+            <span class="exp-badge past">Completed</span>
+          </div>
+          <div class="exp-company">Barrownz Pearl Web Private Limited — Lucknow</div>
+          <div class="exp-period">January 2026 — June 2026</div>
+          <ul class="exp-list">
+            <li>Real-world web application development in a professional team environment</li>
+            <li>Spring Boot backend development with RESTful architecture</li>
+            <li>REST API design, implementation, and documentation with Swagger</li>
+            <li>MySQL database integration, schema design, and optimization</li>
+            <li>Built a live frontend project, Chess NYC, deployed for a US-based client</li>
+            <li>Converted into a full-time offer after successful internship completion</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item fade-in">
+        <div class="exp-dot">📚</div>
+        <div class="glass-card exp-card">
+          <div class="exp-header">
             <span class="exp-role">Java Full Stack Trainee</span>
             <span class="exp-badge past">Completed</span>
           </div>
           <div class="exp-company">Barrownz Learning Academy</div>
-          <div class="exp-period">June 2025 — March 2026</div>
+          <div class="exp-period">June 2025 — December 2025</div>
           <ul class="exp-list">
             <li>Deep dive into J2EE Technologies including Servlets and JSP</li>
             <li>JDBC integration for database-driven dynamic web applications</li>
@@ -951,8 +1066,8 @@ footer .footer-brand {
       <div class="glass-card project-card project-featured" style="border-color:rgba(239,68,68,0.25);">
         <div class="corner-glow"></div>
         <div class="flagship-badge">⭐ Flagship Project</div>
-        <h3 class="project-title">Deep Packet Inspection (DPI) System</h3>
-        <p class="project-sub">A real-time network security platform that analyzes live traffic, detects threats, performs protocol classification, and generates security alerts — built with enterprise Java.</p>
+        <h3 class="project-title">Deep Packet Inspection (DPI) System <span class="live-badge"><span class="ld"></span>LIVE</span></h3>
+        <p class="project-sub">A real-time network security platform that analyzes live traffic, detects threats, performs protocol classification, and generates security alerts — built with enterprise Java, deployed on Render.</p>
         <div class="tech-tags">
           <span class="tech-tag">Java 17</span>
           <span class="tech-tag">Spring Boot 3.2</span>
@@ -989,7 +1104,8 @@ footer .footer-brand {
           <li>Security Event Logging</li>
         </ul>
         <div class="project-btns">
-          <a href="https://github.com/Anas00123/dpi-system" target="_blank" class="btn btn-outline">⬡ GitHub Repo</a>
+          <a href="https://deep-packet-inspection-b5wy.onrender.com/" target="_blank" rel="noopener" class="btn btn-primary">🌐 Live Demo</a>
+          <a href="https://github.com/Anas00123/Deep_Packet_Inspection" target="_blank" rel="noopener" class="btn btn-outline">⬡ GitHub Repo</a>
         </div>
       </div>
 
@@ -1013,40 +1129,59 @@ footer .footer-brand {
             <li>Admin Dashboard + Email Notifications</li>
           </ul>
           <!-- Minimal mockup preview -->
-          <div style="background:rgba(5,8,16,0.8);border:1px solid var(--border);border-radius:10px;padding:0.75rem;font-family:var(--mono);font-size:0.7rem;margin-bottom:1rem;">
+          <div style="background:rgba(5,8,16,0.8);border:1px solid var(--border);border-radius:10px;padding:0.75rem;font-family:var(--mono);font-size:0.7rem;margin-bottom:1rem;overflow-x:auto;">
             <div style="color:var(--text-3);margin-bottom:0.5rem;">GET /api/jobs/search?keyword=java&loc=lucknow</div>
             <div style="color:var(--green)">200 OK</div>
             <div style="color:var(--text-2)">[{ "id": 12, "title": "Java Dev", <br>&nbsp;&nbsp;"company": "TechCorp", "salary": "4-6 LPA" }]</div>
           </div>
+          <div class="project-btns">
+          <a href="https://rojgarshine.com" target="_blank" rel="noopener" class="btn btn-primary">🌐 Live Demo</a>
+          <a href="https://github.com/Anas00123/job_portal_Backend" target="_blank" rel="noopener" class="btn btn-outline">⬡ GitHub Repo</a>
+        </div>
         </div>
 
-        <!-- E-BOOK -->
-        <!-- <div class="glass-card project-card">
-          <div class="corner-glow"></div>
-          <div style="font-size:0.72rem;font-family:var(--mono);color:var(--blue-bright);margin-bottom:0.5rem;">Project 03</div>
-          <h3 class="project-title">E-Book Shop</h3>
-          <p class="project-sub">End-to-end e-commerce platform for digital books with cart, orders, and user auth.</p>
+        <!-- CHESS NYC -->
+        <div class="glass-card project-card" style="border-color:rgba(167,139,250,0.25);">
+          <div class="corner-glow" style="background:rgba(167,139,250,0.08);"></div>
+          <div style="font-size:0.72rem;font-family:var(--mono);color:var(--purple);margin-bottom:0.5rem;">Project 03</div>
+          <h3 class="project-title">Chess NYC <span class="live-badge"><span class="ld"></span>LIVE</span></h3>
+          <p class="project-sub">A complete, multi-page frontend website built for a US-based chess coaching client — program pages, shared component architecture, and a privacy policy page, deployed on Netlify.</p>
           <div class="tech-tags">
-            <span class="tech-tag">Java</span>
-            <span class="tech-tag">Spring Boot</span>
-            <span class="tech-tag">MySQL</span>
-            <span class="tech-tag">HTML/CSS</span>
+            <span class="tech-tag" style="background:rgba(167,139,250,0.1);color:var(--purple);border-color:rgba(167,139,250,0.2);">Bootstrap 5</span>
+            <span class="tech-tag" style="background:rgba(167,139,250,0.1);color:var(--purple);border-color:rgba(167,139,250,0.2);">HTML5</span>
+            <span class="tech-tag" style="background:rgba(167,139,250,0.1);color:var(--purple);border-color:rgba(167,139,250,0.2);">CSS Custom Properties</span>
+            <span class="tech-tag" style="background:rgba(167,139,250,0.1);color:var(--purple);border-color:rgba(167,139,250,0.2);">Vanilla JS</span>
           </div>
           <ul class="feature-list">
-            <li>User Authentication & Session Mgmt</li>
-            <li>Book Catalog with Category Filters</li>
-            <li>Shopping Cart & Checkout Flow</li>
-            <li>Order Management & History</li>
+            <li>Multiple coaching program pages</li>
+            <li>Reusable shared component architecture</li>
+            <li>Privacy Policy page for compliance</li>
+            <li>Fully responsive, US-client-facing build</li>
           </ul>
-          <div style="background:rgba(5,8,16,0.8);border:1px solid var(--border);border-radius:10px;padding:0.75rem;font-family:var(--mono);font-size:0.7rem;margin-bottom:1rem;">
-            <div style="color:var(--text-3);margin-bottom:0.3rem;">POST /api/cart/add</div>
-            <div style="color:var(--text-2)">{ "userId": 5, "bookId": 23, "qty": 1 }</div>
-            <div style="color:var(--green);margin-top:0.25rem;">201 Created — Cart updated</div>
+          <div style="background:rgba(5,8,16,0.85);border:1px solid rgba(167,139,250,0.2);border-radius:10px;overflow:hidden;margin-bottom:1.25rem;">
+            <div style="background:rgba(13,21,37,0.9);padding:0.5rem 0.75rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(167,139,250,0.15);">
+              <span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;"></span>
+              <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);margin-left:0.5rem;">chessnyc.netlify.app</span>
+            </div>
+            <div style="padding:0.75rem;font-family:var(--mono);font-size:0.7rem;">
+              <div style="color:var(--purple);font-weight:700;font-size:0.82rem;margin-bottom:0.25rem;">♞ CHESS NYC</div>
+              <div style="color:var(--text-3);font-size:0.65rem;margin-bottom:0.5rem;">Chess Coaching Programs · New York, USA</div>
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+                <span style="background:rgba(167,139,250,0.15);color:var(--purple);padding:2px 8px;border-radius:4px;font-size:0.62rem;">Programs</span>
+                <span style="background:rgba(167,139,250,0.15);color:var(--purple);padding:2px 8px;border-radius:4px;font-size:0.62rem;">Coaches</span>
+                <span style="background:rgba(167,139,250,0.15);color:var(--purple);padding:2px 8px;border-radius:4px;font-size:0.62rem;">Privacy Policy</span>
+              </div>
+            </div>
           </div>
-        </div> -->
+          <div class="project-btns">
+            <a href="https://chessnyc.netlify.app/" target="_blank" rel="noopener" class="btn btn-outline" style="border-color:rgba(167,139,250,0.4);color:var(--purple);">🌐 Live Demo</a>
+          </div>
+        </div>
       </div>
 
-      <!-- NEW ROW: Fitness + Hospital -->
+      <!-- ROW: Fitness + Hospital -->
       <div class="project-row fade-in">
 
         <!-- ANAS FITNESS -->
@@ -1089,7 +1224,7 @@ footer .footer-brand {
             </div>
           </div>
           <div class="project-btns">
-            <a href="https://anas-fitness.netlify.app/" target="_blank" class="btn btn-outline" style="border-color:rgba(52,211,153,0.4);color:var(--green);">🌐 Live Demo</a>
+            <a href="https://anas-fitness.netlify.app/" target="_blank" rel="noopener" class="btn btn-outline" style="border-color:rgba(52,211,153,0.4);color:var(--green);">🌐 Live Demo</a>
           </div>
         </div>
 
@@ -1134,7 +1269,7 @@ footer .footer-brand {
             </div>
           </div>
           <div class="project-btns">
-            <a href="https://anas-unity-hospital.netlify.app/" target="_blank" class="btn btn-outline">🌐 Live Demo</a>
+            <a href="https://anas-unity-hospital.netlify.app/" target="_blank" rel="noopener" class="btn btn-outline">🌐 Live Demo</a>
           </div>
         </div>
 
@@ -1202,17 +1337,17 @@ footer .footer-brand {
     <h2 class="section-title fade-in">Academic <span class="grad">Foundation</span></h2>
     <div class="edu-grid fade-in">
       <div class="glass-card edu-card" style="border-color:rgba(59,130,246,0.3);">
-        <div class="edu-year">2023 — Present</div>
+        <div class="edu-year">2023 — 2026</div>
         <div class="edu-degree">B.Tech</div>
         <div class="edu-field">Computer Science & Engineering</div>
         <div class="edu-school">Goel Institute of Technology and Management, Lucknow</div>
-        <div class="edu-badge">🎓 Currently Enrolled</div>
+        <div class="edu-badge">7.46 CGPA</div>
       </div>
       <div class="glass-card edu-card">
         <div class="edu-year">2020 — 2023</div>
         <div class="edu-degree">Diploma</div>
         <div class="edu-field">Computer Science & Engineering</div>
-        <div class="edu-school">Polytechnic Institute</div>
+        <div class="edu-school">Sevdi Institute of Management and Technology</div>
         <div class="edu-badge" style="background:rgba(59,130,246,0.1);color:var(--blue-bright);border-color:rgba(59,130,246,0.3);">📊 75% Score</div>
       </div>
     </div>
@@ -1258,8 +1393,8 @@ footer .footer-brand {
       <div class="glass-card why-card">
         <div class="why-icon blue">🏢</div>
         <div>
-          <h3>Real Internship Experience</h3>
-          <p>Currently working at Barrownz Pearl Web — shipping real code in a real company. Not just a project, an actual professional environment.</p>
+          <h3>Full-Time Industry Experience</h3>
+          <p>Working full-time at Barrownz Pearl Web after a successful internship — shipping real code in a real company, day in and day out.</p>
         </div>
       </div>
       <div class="glass-card why-card">
@@ -1294,7 +1429,7 @@ footer .footer-brand {
         <div class="why-icon red">🛡️</div>
         <div>
           <h3>Security Systems Built</h3>
-          <p>Built a live DPI security system with threat detection — demonstrates ability to tackle complex, high-impact technical problems.</p>
+          <p>Built and deployed a live DPI security system with threat detection — demonstrates ability to tackle complex, high-impact technical problems.</p>
         </div>
       </div>
     </div>
@@ -1306,7 +1441,7 @@ footer .footer-brand {
   <div class="container">
     <div class="section-label fade-in">// contact</div>
     <h2 class="section-title fade-in">Let's <span class="grad">Connect</span></h2>
-    <p class="section-sub fade-in">Open to full-time roles, internship extensions, and interesting Java backend opportunities.</p>
+    <p class="section-sub fade-in">Open to full-time roles, remote opportunities, and interesting Java backend work.</p>
     <div class="contact-wrapper fade-in">
       <div class="contact-info">
         <a href="mailto:Mohdanas2253@gmail.com" class="contact-item">
@@ -1323,7 +1458,7 @@ footer .footer-brand {
             <div class="ci-value">+91 9793192014</div>
           </div>
         </a>
-        <a href="https://linkedin.com/in/mohd-anas-99503125a" target="_blank" class="contact-item">
+        <a href="https://linkedin.com/in/mohd-anas-99503125a" target="_blank" rel="noopener" class="contact-item">
           <div class="contact-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--blue-bright)"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
           </div>
@@ -1332,7 +1467,7 @@ footer .footer-brand {
             <div class="ci-value">linkedin.com/in/mohd-anas-99503125a</div>
           </div>
         </a>
-        <a href="https://github.com/Anas00123" target="_blank" class="contact-item">
+        <a href="https://github.com/Anas00123" target="_blank" rel="noopener" class="contact-item">
           <div class="contact-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--text-2)"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </div>
@@ -1344,7 +1479,7 @@ footer .footer-brand {
         <div style="margin-top:0.5rem;padding:1.25rem;border-radius:12px;background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(34,211,238,0.05));border:1px solid var(--border-bright);">
           <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">
             📍 <strong style="color:var(--text);">Lucknow, Uttar Pradesh, India</strong><br>
-            💼 Open to: Full-time, Internship Extension, Remote<br>
+            💼 Open to: Remote, Full-time roles<br>
             ⏰ Response time: Within 24 hours
           </div>
         </div>
@@ -1352,34 +1487,41 @@ footer .footer-brand {
 
       <div>
         <div class="glass-card" style="padding:1.75rem;">
-          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;">Send a Message</h3>
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.5rem;">Send a Message</h3>
+          <p class="form-note" style="margin-bottom:1rem;">Fill this in and Mohd Anas will get an email straight to his inbox.</p>
           <div class="contact-form" id="contact-form">
             <div class="form-group">
-              <label>Your Name</label>
-              <input type="text" id="cf-name" placeholder="e.g. Mohd Anas" />
+              <label for="cf-name">Your Name</label>
+              <input type="text" id="cf-name" placeholder="e.g. Jane Recruiter" required />
             </div>
             <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" id="cf-email" placeholder="you@company.com" />
+              <label for="cf-email">Email Address</label>
+              <input type="email" id="cf-email" placeholder="you@company.com" required />
             </div>
             <div class="form-group">
-              <label>Subject</label>
+              <label for="cf-subject">Subject</label>
               <input type="text" id="cf-subject" placeholder="Job Opportunity / Collaboration" />
             </div>
             <div class="form-group">
-              <label>Message</label>
-              <textarea id="cf-msg" rows="4" placeholder="Tell me about the opportunity..."></textarea>
+              <label for="cf-msg">Message</label>
+              <textarea id="cf-msg" rows="4" placeholder="Tell me about the opportunity..." required></textarea>
             </div>
-            <button class="btn btn-primary" onclick="submitForm()" style="width:100%;justify-content:center;">Send Message ↗</button>
+            <div class="form-error" id="form-error"></div>
+            <button class="btn btn-primary" id="cf-submit-btn" onclick="submitForm()" style="width:100%;justify-content:center;">Send Message ↗</button>
           </div>
           <div class="form-success" id="form-success">
             ✅ Message sent! Mohd Anas will get back to you within 24 hours.
+          </div>
+          <div class="form-fail" id="form-fail">
+            ⚠ Something went wrong sending the message. Please email directly at Mohdanas2253@gmail.com.
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 
 <!-- FOOTER -->
 <footer>
@@ -1396,6 +1538,7 @@ footer .footer-brand {
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [];
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function resize() {
   W = canvas.width = window.innerWidth;
@@ -1413,7 +1556,8 @@ function Particle() {
   this.alpha = Math.random() * 0.5 + 0.1;
 }
 
-for (let i = 0; i < 120; i++) particles.push(new Particle());
+const particleCount = window.innerWidth < 600 ? 50 : 120;
+for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
 function drawGrid() {
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
@@ -1455,7 +1599,7 @@ function animateParticles() {
       }
     }
   });
-  requestAnimationFrame(animateParticles);
+  if (!prefersReducedMotion) requestAnimationFrame(animateParticles);
 }
 animateParticles();
 
@@ -1571,34 +1715,91 @@ function toggleTheme() {
 
 // ============= MOBILE MENU =============
 function toggleMenu() {
-  document.getElementById('mobile-menu').classList.toggle('open');
+  const menu = document.getElementById('mobile-menu');
+  const btn = document.querySelector('.hamburger');
+  const open = menu.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 function closeMenu() {
   document.getElementById('mobile-menu').classList.remove('open');
+  document.querySelector('.hamburger').setAttribute('aria-expanded', 'false');
 }
 
-// ============= CONTACT FORM =============
-function submitForm() {
+// ============= CONTACT FORM (Formspree-powered email delivery) =============
+// To receive these messages directly in your inbox, create a free form at
+// https://formspree.io using Mohdanas2253@gmail.com, then replace YOUR_FORM_ID below.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+async function submitForm() {
   const name = document.getElementById('cf-name').value.trim();
   const email = document.getElementById('cf-email').value.trim();
+  const subject = document.getElementById('cf-subject').value.trim() || 'Portfolio Contact';
   const msg = document.getElementById('cf-msg').value.trim();
-  if (!name || !email || !msg) { alert('Please fill in all required fields.'); return; }
+  const errorEl = document.getElementById('form-error');
+  const btn = document.getElementById('cf-submit-btn');
+  errorEl.textContent = '';
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!name || !email || !msg) { errorEl.textContent = 'Please fill in your name, email, and message.'; return; }
+  if (!emailPattern.test(email)) { errorEl.textContent = 'Please enter a valid email address.'; return; }
+
   const form = document.getElementById('contact-form');
   const success = document.getElementById('form-success');
-  form.style.display = 'none';
-  success.classList.add('show');
-  // Optional: open mailto
-  const subject = document.getElementById('cf-subject').value || 'Portfolio Contact';
-  window.location.href = `mailto:Mohdanas2253@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${msg}`)}`;
+  const fail = document.getElementById('form-fail');
+  fail.classList.remove('show');
+
+  if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+    // Fallback: no email service configured yet, open the visitor's mail client instead.
+    window.location.href = `mailto:Mohdanas2253@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${msg}`)}`;
+    form.style.display = 'none';
+    success.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, subject, message: msg })
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      success.classList.add('show');
+    } else {
+      fail.classList.add('show');
+    }
+  } catch (err) {
+    fail.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send Message ↗';
+  }
 }
 
-// ============= NAVBAR SCROLL =============
+// ============= NAVBAR SCROLL + PROGRESS + ACTIVE LINK + BACK TO TOP =============
+const navLinks = document.querySelectorAll('.nav-links a');
+const sectionsForNav = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
 window.addEventListener('scroll', () => {
   const nav = document.getElementById('navbar');
   if (window.scrollY > 20) {
     nav.style.background = document.documentElement.getAttribute('data-theme') === 'light'
       ? 'rgba(248,250,252,0.97)' : 'rgba(5,8,16,0.97)';
   }
+
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('scroll-progress').style.width = progress + '%';
+
+  document.getElementById('back-to-top').classList.toggle('show', scrollTop > 500);
+
+  let currentIdx = -1;
+  sectionsForNav.forEach((sec, i) => {
+    if (sec && sec.getBoundingClientRect().top <= 120) currentIdx = i;
+  });
+  navLinks.forEach((a, i) => a.classList.toggle('active', i === currentIdx));
 });
 
 // ============= DPI LOG ANIMATION =============
